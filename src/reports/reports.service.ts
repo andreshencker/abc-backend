@@ -9,37 +9,55 @@ import { RentalReportDto } from './dto/rental-report.dto';
 @Injectable()
 export class ReportsService {
     constructor(
-        @InjectModel(Sale.name) private readonly saleModel: Model<SaleDocument>,
-        @InjectModel(Rental.name) private readonly rentalModel: Model<RentalDocument>,
+      @InjectModel(Sale.name) private readonly saleModel: Model<SaleDocument>,
+      @InjectModel(Rental.name) private readonly rentalModel: Model<RentalDocument>,
     ) {}
 
     async generateSalesReport(filters: SalesReportDto) {
         const query: any = {};
+
         if (filters.startDate && filters.endDate) {
             query.date = {
                 $gte: new Date(filters.startDate),
                 $lte: new Date(filters.endDate),
             };
         }
+
         if (filters.customerID) {
             query.customerID = filters.customerID;
         }
 
-        return await this.saleModel.find(query).populate('customerID').populate('propertyID');
+        if (filters.propertyID) {
+            query.propertyID = filters.propertyID;
+        }
+
+        return await this.saleModel
+          .find(query)
+          .populate('customerID')
+          .populate('propertyID');
     }
 
     async generateRentalReport(filters: RentalReportDto) {
         const query: any = {};
+
         if (filters.startDate && filters.endDate) {
             query.date = {
                 $gte: new Date(filters.startDate),
                 $lte: new Date(filters.endDate),
             };
         }
+
         if (filters.customerID) {
             query.customerID = filters.customerID;
         }
 
-        return await this.rentalModel.find(query).populate('customerID').populate('propertyID');
+        if (filters.propertyID) {
+            query.propertyID = filters.propertyID;
+        }
+
+        return await this.rentalModel
+          .find(query)
+          .populate('customerID')
+          .populate('propertyID');
     }
 }

@@ -27,6 +27,16 @@ export class SaleController {
         }
     }
 
+    @Post('bulk')
+    async bulkCreate(@Body() dtoList: CreateSaleDto[]) {
+        try {
+            const sales = await this.saleService.bulkCreate(dtoList);
+            return { message: 'Sales created successfully', sales };
+        } catch (error) {
+            throw new HttpException(error.message, error.status || HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
     @Get()
     async findAll() {
         try {

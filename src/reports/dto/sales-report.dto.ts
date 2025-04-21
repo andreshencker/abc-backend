@@ -12,4 +12,8 @@ export class SalesReportDto {
     @IsOptional()
     @IsString()
     customerID?: string;
+
+    @IsOptional()
+    @IsString()
+    propertyID?: string;
 }

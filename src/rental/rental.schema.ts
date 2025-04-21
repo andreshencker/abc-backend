@@ -1,7 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, Types } from 'mongoose';
 import { Property } from '../property/property.schema';
-import { Customer } from '../customer/customer.schema';
+import { User } from '../users/user.schema';
 
 export type RentalDocument = Rental & Document;
 
@@ -10,7 +10,7 @@ export class Rental {
     @Prop({ type: Types.ObjectId, ref: 'Property', required: true })
     propertyID: Types.ObjectId;
 
-    @Prop({ type: Types.ObjectId, ref: 'Customer', required: true })
+    @Prop({ type: Types.ObjectId, ref: 'User', required: true })
     customerID: Types.ObjectId;
 
     @Prop({ type: Date, required: true })

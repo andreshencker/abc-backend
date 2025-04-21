@@ -1,11 +1,11 @@
 import { Module } from '@nestjs/common';
+import { MongooseModule } from '@nestjs/mongoose';
 import { DashboardService } from './dashboard.service';
 import { DashboardController } from './dashboard.controller';
-import { MongooseModule } from '@nestjs/mongoose';
 import { Property, PropertySchema } from '../property/property.schema';
 import { Sale, SaleSchema } from '../sales/sales.schema';
 import { Rental, RentalSchema } from '../rental/rental.schema';
-import { Customer, CustomerSchema } from '../customer/customer.schema';
+import { User, UserSchema } from '../users/user.schema';
 
 @Module({
     imports: [
@@ -13,7 +13,7 @@ import { Customer, CustomerSchema } from '../customer/customer.schema';
             { name: Property.name, schema: PropertySchema },
             { name: Sale.name, schema: SaleSchema },
             { name: Rental.name, schema: RentalSchema },
-            { name: Customer.name, schema: CustomerSchema },
+            { name: User.name, schema: UserSchema },
         ]),
     ],
     controllers: [DashboardController],

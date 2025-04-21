@@ -1,3 +1,5 @@
+
+// src/dashboard/dashboard.controller.ts
 import { Controller, Get, HttpException, HttpStatus } from '@nestjs/common';
 import { DashboardService } from './dashboard.service';
 
@@ -12,8 +14,8 @@ export class DashboardController {
             return { message: 'Dashboard summary retrieved successfully', data };
         } catch (error) {
             throw new HttpException(
-                error.message || 'Failed to retrieve dashboard summary',
-                error.status || HttpStatus.INTERNAL_SERVER_ERROR,
+              error.message || 'Failed to retrieve dashboard summary',
+              error.status || HttpStatus.INTERNAL_SERVER_ERROR
             );
         }
     }

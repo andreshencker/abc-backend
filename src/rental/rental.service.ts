@@ -25,6 +25,17 @@ export class RentalService {
         }
     }
 
+    async bulkCreate(dtoList: CreateRentalDto[]): Promise<Rental[]> {
+        try {
+            const rentals = await this.rentalModel.insertMany(dtoList, { ordered: true });
+            return rentals;
+        } catch (error) {
+            throw new InternalServerErrorException('Failed to bulk create rentals');
+        }
+    }
+
+
+
     async findAll(): Promise<Rental[]> {
         try {
             return await this.rentalModel

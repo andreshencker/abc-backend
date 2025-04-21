@@ -29,24 +29,63 @@ export class AuthService {
 
     async register(registerDto: RegisterDto): Promise<User> {
         try {
+            console.log('👉 Payload received:', registerDto); // Log the incoming data
+
+            // Check if a user with the same email already exists
             const existingUser = await this.userModel.findOne({ email: registerDto.email });
             if (existingUser) {
                 throw new ConflictException('Email already registered');
             }
 
+            // Hash the password before saving
             const hashed = await hashPassword(registerDto.password);
-            const user = new this.userModel({
+
+            // Prepare the user data to be saved
+            const userPayload = {
                 ...registerDto,
                 password: hashed,
                 role: registerDto.role || 'customer',
-            });
+            };
 
+            console.log('🛠 User to be saved:', userPayload); // Log the final user object
+
+            // Save the new user
+            const user = new this.userModel(userPayload);
             return await user.save();
         } catch (error) {
-            if (error.status) throw error;
-            throw new InternalServerErrorException('Failed to register user');
+            console.error('❌ Error in register:', error); // Log the error for debugging
+            if (error.status) throw error; // Re-throw known exceptions
+            throw new InternalServerErrorException('Failed to register user'); // Throw general error
         }
     }
+
+    async bulkRegister(users: RegisterDto[]): Promise<User[]> {
+        const createdUsers: User[] = [];
+
+        for (const dto of users) {
+            try {
+                const existingUser = await this.userModel.findOne({ email: dto.email });
+                if (existingUser) continue;
+
+                const hashed = await hashPassword(dto.password);
+                const user = new this.userModel({
+                    ...dto,
+                    password: hashed,
+                    role: dto.role || 'customer',
+                });
+
+                const savedUser = await user.save();
+                createdUsers.push(savedUser);
+            } catch (error) {
+                console.error(`❌ Error creating user ${dto.email}:`, error.message);
+            }
+        }
+
+        return createdUsers;
+    }
+
+
+
 
     async getProfile(userId: string) {
         return this.userModel.findById(userId).select('-password');

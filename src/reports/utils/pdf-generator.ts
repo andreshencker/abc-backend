@@ -1,16 +1,21 @@
 const PdfPrinter = require('pdfmake');
 import * as fs from 'fs';
+import * as path from 'path';
 
 const fonts = {
     Roboto: {
-        normal: 'node_modules/pdfmake/build/vfs_fonts.js',
-        bold: 'node_modules/pdfmake/build/vfs_fonts.js',
+        normal: path.resolve(__dirname, '../../assets/fonts/Roboto-Regular.ttf'),
+        bold: path.resolve(__dirname, '../../assets/fonts/Roboto-Bold.ttf'),
     },
 };
 
 const printer = new PdfPrinter(fonts);
 
 export const generatePDF = async (data: any[], title: string): Promise<Buffer> => {
+    if (!data || data.length === 0) {
+        throw new Error('No data available to generate PDF');
+    }
+
     const body = [
         Object.keys(data[0]).map((key) => ({ text: key, bold: true })),
         ...data.map((row) => Object.values(row).map((val) => String(val))),
@@ -33,6 +38,9 @@ export const generatePDF = async (data: any[], title: string): Promise<Buffer> =
                 marginBottom: 10,
             },
         },
+        defaultStyle: {
+            font: 'Roboto',
+        },
     };
 
     const pdfDoc = printer.createPdfKitDocument(docDefinition);
@@ -44,3 +52,4 @@ export const generatePDF = async (data: any[], title: string): Promise<Buffer> =
         pdfDoc.end();
     });
 };
+

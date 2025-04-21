@@ -27,6 +27,16 @@ export class RentalController {
         }
     }
 
+    @Post('bulk')
+    async bulkCreate(@Body() dtoList: CreateRentalDto[]) {
+        try {
+            const rentals = await this.rentalService.bulkCreate(dtoList);
+            return { message: 'Rentals created successfully', rentals };
+        } catch (error) {
+            throw new HttpException(error.message, error.status || HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
     @Get()
     async findAll() {
         try {

@@ -12,4 +12,8 @@ export class RentalReportDto {
     @IsOptional()
     @IsString()
     customerID?: string;
+
+    @IsOptional()
+    @IsString()
+    propertyID?: string;
 }

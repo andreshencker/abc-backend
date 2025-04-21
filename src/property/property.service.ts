@@ -25,6 +25,17 @@ export class PropertyService {
         }
     }
 
+    async bulkCreate(properties: CreatePropertyDto[]) {
+        try {
+            const created = await this.propertyModel.insertMany(properties, { ordered: false });
+            return created;
+        } catch (error) {
+            console.error('[Bulk Insert Error]', error);
+            throw new InternalServerErrorException('Failed to insert properties in bulk');
+        }
+    }
+
+
     async findAll(): Promise<Property[]> {
         try {
             return await this.propertyModel.find().populate('catID').exec();
@@ -66,4 +77,6 @@ export class PropertyService {
             throw new InternalServerErrorException('Failed to delete property');
         }
     }
+
+
 }

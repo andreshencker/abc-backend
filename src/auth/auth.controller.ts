@@ -30,6 +30,17 @@ export class AuthController {
         }
     }
 
+    @Post('/register/bulk')
+    async bulkCreate(@Body() users: RegisterDto[]) {
+        try {
+            const result = await this.authService.bulkRegister(users);
+            return { message: 'Bulk user creation completed', count: result.length };
+        } catch (error) {
+            throw new HttpException('Bulk user creation failed', HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+
     @UseGuards(JwtAuthGuard)
     @Get('me')
     async profile(@Req() req: any) {

@@ -25,6 +25,16 @@ export class SaleService {
         }
     }
 
+    async bulkCreate(dtoList: CreateSaleDto[]): Promise<Sale[]> {
+        try {
+            const sales = await this.saleModel.insertMany(dtoList, { ordered: true });
+            return sales;
+        } catch (error) {
+            throw new InternalServerErrorException('Failed to bulk create sales');
+        }
+    }
+
+
     async findAll(): Promise<Sale[]> {
         try {
             return await this.saleModel

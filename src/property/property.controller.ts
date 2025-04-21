@@ -27,6 +27,20 @@ export class PropertyController {
         }
     }
 
+    @Post('bulk')
+    async createBulk(@Body() dto: CreatePropertyDto[]) {
+        console.log('Bulk DTO:', dto); // ✅ Confirmar que llegan los datos
+        try {
+            const properties = await this.propertyService.bulkCreate(dto);
+            console.log('Inserted:', properties); // ✅ Confirmar que se insertaron
+            return { message: 'Properties created successfully', properties };
+        } catch (error) {
+            console.error('Error inserting bulk:', error);
+            throw new HttpException(error.message, error.status || HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+
     @Get()
     async findAll() {
         try {

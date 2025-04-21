@@ -8,5 +8,7 @@ if (!process.env.MONGO_URI) {
 }
 
 export const mongoConfig: MongooseModuleOptions = {
-    uri: process.env.MONGO_URI,
+    uri: process.env.MONGO_URI!, // <- aquí el fix
+    dbName: 'abc_property_db',
 };
+
